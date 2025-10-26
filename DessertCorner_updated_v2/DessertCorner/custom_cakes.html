@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Custom Cakes — Dessert Corner</title>
+  <meta name="description" content="Order a custom cake: choose size, flavour, filling, and buttercream. Add design notes and an inspiration photo." />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="container header">
+    <div class="brand">
+<img src="images/logo.png" alt="Dessert Corner logo" class="site-logo"/>
+      <div style="font-size:0.95rem">Dessert Corner</div>
+    </div>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="order.html">Order</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="section">
+      <h2>Custom Cakes</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:start">
+        <div class="card">
+          <img class="thumb" src="images/choc_drip.jpg" alt="Sample custom cake"/>
+          <div style="margin-top:.6rem;color:var(--muted);font-size:.95rem">
+            Choose cake flavours, fillings, and buttercream. Share your design notes and an inspiration photo.
+          </div>
+        </div>
+
+        <form class="card" action="https://formspree.io/f/xnnoqdaz" method="POST" enctype="multipart/form-data">
+          <!-- Hidden helpers -->
+          <input type="hidden" name="_subject" value="New Order — Custom Cake">
+          <input type="hidden" name="item_type" value="Custom Cake">
+          <input type="hidden" id="selected_date" name="selected_date" value="">
+          <input type="hidden" name="_redirect" value="thankyou.html">
+          <input type="text" name="website" style="display:none">
+
+          <div class="form-group">
+            <label for="name">Your name</label>
+            <input id="name" name="name" type="text" required>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required>
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone (optional)</label>
+            <input id="phone" name="phone" type="text" placeholder="(xxx) xxx-xxxx">
+          </div>
+
+          <!-- Date: hidden if already chosen -->
+          <div class="form-group" id="pickup-wrap">
+            <label for="pickup">Preferred pickup date</label>
+            <input id="pickup" name="pickup" type="date" required>
+          </div>
+          <div class="card" id="pickup-confirm" style="display:none; padding:.8rem;">
+            <strong id="pickup-badge">Pickup date:</strong>
+            <a href="order.html" onclick="try{localStorage.removeItem('dc_selected_date')}catch(e){}"
+               style="margin-left:.6rem; font-size:.9rem;">Change date</a>
+          </div>
+
+          <hr>
+
+          <!-- Sizes -->
+          <div class="form-group">
+            <label for="cake_size">Cake size</label>
+            <select id="cake_size" name="cake_size" required>
+              <option value="" disabled selected>Select a size</option>
+              <option>6" round (small)</option>
+              <option>8" round (medium)</option>
+              <option>10" round (large)</option>
+              <option>Two-tier (please describe)</option>
+            </select>
+          </div>
+
+          <!-- Flavours (from your image) -->
+          <div class="form-group">
+            <label for="cake_flavour">Cake flavour</label>
+            <select id="cake_flavour" name="cake_flavour" required>
+              <option value="" disabled selected>Select a flavour</option>
+              <option>Vanilla</option>
+              <option>Chocolate</option>
+              <option>Lemon</option>
+              <option>Confetti</option>
+              <option>Carrot</option>
+              <option>Red Velvet</option>
+              <option>Coconut</option>
+              <option>Tres Leches</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="cake_filling">Filling</label>
+            <select id="cake_filling" name="cake_filling" required>
+              <option value="" disabled selected>Select a filling</option>
+              <option>Buttercream Frosting</option>
+              <option>Lemon</option>
+              <option>Raspberry</option>
+              <option>Ganache</option>
+              <option>Custard</option>
+              <option>Strawberry</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="buttercream">Buttercream</label>
+            <select id="buttercream" name="buttercream" required>
+              <option value="" disabled selected>Select buttercream</option>
+              <option>Vanilla Buttercream</option>
+              <option>Chocolate Buttercream</option>
+              <option>Cream Cheese (for red velvet/carrot)</option>
+              <option>Other (describe)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="serves">Approx. servings (optional)</label>
+            <input id="serves" name="serves" type="number" min="1" placeholder="e.g., 12, 20">
+          </div>
+
+          <div class="form-group">
+            <label for="message">Message on cake (optional)</label>
+            <input id="message" name="message" type="text" placeholder='e.g., "Happy Birthday Ali!"'>
+          </div>
+
+          <!-- Description -->
+          <div class="form-group">
+            <label for="details">Design notes & description</label>
+            <textarea id="details" name="details" rows="5" required
+              placeholder="Theme, colours, tier count, decorations (flowers, drip, berries), budget range, allergies…"></textarea>
+          </div>
+
+          <!-- Inspiration image -->
+          <div class="form-group">
+            <label for="images">Please send images to our Instagram page with your email for inspiration pictures(optional)</label>
+          </div>
+
+          <button class="btn btn-primary" type="submit">Submit Order</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>© Dessert Corner — Built by Ranim Mortada</p>
+    </div>
+  </footer>
+
+  <script>
+  // Use selected date from Order page if available
+  (function(){
+    try{
+      var saved = localStorage.getItem('dc_selected_date');
+      var wrap  = document.getElementById('pickup-wrap');
+      var input = document.getElementById('pickup');
+      var conf  = document.getElementById('pickup-confirm');
+      var badge = document.getElementById('pickup-badge');
+      if(saved && wrap && input && conf && badge){
+        var d=new Date(saved), yyyy=d.getFullYear(), mm=String(d.getMonth()+1).padStart(2,'0'), dd=String(d.getDate()).padStart(2,'0');
+        input.value = `${yyyy}-${mm}-${dd}`;
+        wrap.style.display='none'; badge.textContent = `Pickup date: ${saved}`; conf.style.display='block';
+        // also include it as hidden field for Formspree
+        var hidden=document.getElementById('selected_date'); if(hidden) hidden.value=saved;
+      }
+    }catch(e){}
+  })();
+  </script>
+</body>
+</html>

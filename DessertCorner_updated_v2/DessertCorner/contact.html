@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Contact — Dessert Corner</title>
+  <meta name="description" content="Contact Dessert Corner for custom cake, cupcake, and cookie orders or questions." />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="container header">
+    <div class="brand">
+<img src="images/logo.png" alt="Dessert Corner logo" class="site-logo"/>
+      <div style="font-size:0.95rem">Dessert Corner</div>
+    </div>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="order.html">Order</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+      <a class="cta" href="order.html">Start Order</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="section">
+      <h2>Contact Us</h2>
+      <p style="color:var(--muted);max-width:60ch">
+        Questions, custom ideas, or availability? Send us a message here and we’ll get back to you soon.
+      </p>
+
+      <div style="display:grid;grid-template-columns:1.2fr .8fr;gap:1rem;align-items:start">
+        <!-- Contact form -->
+        <form class="card" action="https://formspree.io/f/xnnoqdaz" method="POST" enctype="multipart/form-data" novalidate>
+          <!-- Hidden helpers -->
+          <input type="hidden" name="_subject" value="Website Contact — Dessert Corner">
+          <input type="hidden" name="_redirect" value="thankyou.html">
+          <input type="text" name="website" style="display:none">
+
+          <div class="form-group">
+            <label for="name">Your name</label>
+            <input id="name" name="name" type="text" required autocomplete="name">
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required autocomplete="email">
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone (optional)</label>
+            <input id="phone" name="phone" type="text" placeholder="(xxx) xxx-xxxx" autocomplete="tel">
+          </div>
+
+          <div class="form-group">
+            <label for="topic">What’s this about?</label>
+            <select id="topic" name="topic" required>
+              <option value="" disabled selected>Select one</option>
+              <option>General question</option>
+              <option>Custom cake</option>
+              <option>Custom cupcakes</option>
+              <option>Cookies</option>
+              <option>Order status</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="6" required
+              placeholder="Tell us about flavours, theme, colours, servings, pickup date, allergies…"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="images">Upload an inspiration image (optional)</label>
+            <input id="images" name="images" type="file" accept="image/*">
+          </div>
+
+          <button class="btn btn-primary" type="submit">Send Message</button>
+        </form>
+
+        <!-- Contact info -->
+        <aside class="card" aria-label="Business contact info">
+          <h3 style="margin-top:0">Business Info</h3>
+          <ul style="list-style:none;padding:0;margin:0;display:grid;gap:.6rem;">
+            <li>
+              <strong>Email:</strong>
+              <a href="mailto:DessertCorner2@gmail.com">DessertCorner@gmail.com</a>
+            </li>
+            <li>
+              <strong>Instagram:</strong>
+              <a href="https://www.instagram.com/dessert_corner._?igsh=Y3FsZ3R1bnhpanpk&utm_source=qr target="_blank" rel="noopener">DessertCorner.ca</a>
+            </li>
+            <li>
+              <strong>Hours:</strong>
+              <div style="color:var(--muted)">Mon–Fri 9–6, Sat 10–4 (Sun closed)</div>
+            </li>
+            <li style="color:var(--muted)">
+              Pickup is arranged after we confirm your order by email. No public address.
+            </li>
+          </ul>
+
+          <div style="margin-top:1rem; display:flex; gap:.6rem; flex-wrap:wrap">
+            <a class="btn btn-outline" href="https://www.instagram.com/dessert_corner._?igsh=Y3FsZ3R1bnhpanpk&utm_source=qr" target="_blank" rel="noopener">DM on Instagram</a>
+            <a class="btn btn-outline" href="order.html">Start an Order</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>© Dessert Corner — Built by Ranim Mortada</p>
+    </div>
+  </footer>
+</body>
+</html>
