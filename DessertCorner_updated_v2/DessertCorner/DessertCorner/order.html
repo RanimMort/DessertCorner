@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Order — Dessert Corner</title>
+  <meta name="description" content="Place a custom order for cakes, cupcakes, or cookies. Check availability and choose a pickup date." />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="container header">
+    <div class="brand">
+<img src="images/logo.png" alt="Dessert Corner logo" class="site-logo"/>
+      <div style="font-size:0.95rem">Dessert Corner</div>
+    </div>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="order.html">Order</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+      <a class="cta" href="order.html">Start Order</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="section">
+      <h2>Place an Order</h2>
+      <p style="color:var(--muted)">Choose a date and then select the type of custom dessert you'd like. If you need help, message us via the Contact page.</p>
+
+      <!-- Always-visible product links -->
+      <div class="order-links" style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:1rem">
+        <a class="btn btn-outline" href="custom_cakes.html">Custom Cakes</a>
+        <a class="btn btn-outline" href="cupcakes.html">Custom Cupcakes</a>
+        <a class="btn btn-outline" href="cookies.html">Custom Cookies</a>
+      </div>
+
+      <!-- Shown after a date is picked -->
+      <div id="after-pick" class="order-links" style="display:none; gap:.6rem; margin-top:.6rem;">
+        <a class="btn btn-primary" href="custom_cakes.html">Start Custom Cakes</a>
+        <a class="btn btn-primary" href="cupcakes.html">Start Cupcakes</a>
+        <a class="btn btn-primary" href="cookies.html">Start Cookies</a>
+      </div>
+
+      <!-- Availability -->
+      <div style="margin-top:1.4rem" class="card" aria-labelledby="calendar-title">
+        <div class="calendar-head" style="display:flex;align-items:center;justify-content:space-between;gap:.6rem;">
+          <div>
+            <h3 id="calendar-title" style="margin:0">Availability</h3>
+            <p id="calendar-sub" style="margin:.2rem 0 0;color:var(--muted)"></p>
+          </div>
+          <div class="calendar-nav" aria-label="Change month" style="display:flex;gap:.5rem;">
+            <button id="prev-month" aria-label="Previous month" style="border:1px solid #e6e6e6;background:#fff;border-radius:8px;padding:.35rem .6rem;cursor:pointer;">&larr;</button>
+            <button id="next-month" aria-label="Next month" style="border:1px solid #e6e6e6;background:#fff;border-radius:8px;padding:.35rem .6rem;cursor:pointer;">&rarr;</button>
+          </div>
+        </div>
+
+        <!-- Weekday headings -->
+        <div class="calendar-grid" id="calendar" role="grid" aria-readonly="true"
+             style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:.8rem;">
+          <div style="text-align:center;color:var(--muted);font-weight:700;">Sun</div>
+          <div style="text-align:center;color:var(--muted);font-weight:700;">Mon</div>
+          <div style="text-align:center;color:var(--muted);font-weight:700;">Tue</div>
+          <div style="text-align:center;color:var(--muted);font-weight:700;">Wed</div>
+          <div style="text-align:center;color:var(--muted);font-weight:700;">Thu</div>
+          <div style="text-align:center;color:var(--muted);font-weight:700;">Fri</div>
+          <div style="text-align:center;color:var(--muted);font-weight:700;">Sat</div>
+          <!-- Days injected below -->
+        </div>
+
+        <div class="calendar-legend" style="display:flex;gap:1rem;align-items:center;margin-top:.6rem;color:var(--muted);font-size:.9rem;">
+          <span><span style="width:14px;height:14px;border-radius:4px;display:inline-block;border:1px solid #ddd;background:#fff;margin-right:.35rem;"></span>Available</span>
+          <span><span style="width:14px;height:14px;border-radius:4px;display:inline-block;border:1px solid #ddd;background:#A5B0CC;margin-right:.35rem;"></span>Unavailable</span>
+          <span><span style="width:14px;height:14px;border-radius:4px;display:inline-block;border:2px solid var(--accent);background:transparent;margin-right:.35rem;"></span>Selected</span>
+        </div>
+
+        <!-- Selected date output -->
+        <p id="selected-date" style="margin-top:.6rem;color:var(--muted)"></p>
+      </div>
+
+      <!-- How to Order -->
+      <div style="margin-top:1.4rem" class="card">
+        <h3 style="margin-top:0">How to Order</h3>
+        <ol>
+          <li>Pick an item type above (cakes/cupcakes/cookies).</li>
+          <li>Select a pickup date on the calendar.</li>
+          <li>Fill the form on the product page with details & images.</li>
+          <li>Submit and wait for our confirmation email.</li>
+        </ol>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>© Dessert Corner — Built by Ranim Mortada</p>
+    </div>
+  </footer>
+
+  <script>
+  // Order page calendar — month nav, block past dates, one order/day, save selection
+  (function(){
+    const grid   = document.getElementById('calendar');
+    const title  = document.getElementById('calendar-title');
+    const sub    = document.getElementById('calendar-sub');
+    const out    = document.getElementById('selected-date');
+    const prevBtn= document.getElementById('prev-month');
+    const nextBtn= document.getElementById('next-month');
+    const afterPick = document.getElementById('after-pick');
+
+    const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+    // Start-of-today (midnight) for clean comparisons
+    const now   = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const startOfCurrentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+    // Calendar view starts on the current month
+    let view = new Date(startOfCurrentMonth.getTime());
+    let selectedBtn = null;
+
+    // Optional: mark fully-booked dates here. Example:
+    // const UNAVAILABLE = { "2025-10": [7, 14, 21], "2025-11": [3, 10] };
+    const UNAVAILABLE = {};
+
+    function ymKey(d){ return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0'); }
+
+    function clearOldDays(){
+      // keep the 7 weekday headers at the top; remove anything after that
+      while (grid.children.length > 7) grid.removeChild(grid.lastElementChild);
+    }
+
+    function render(){
+      clearOldDays();
+
+      const year = view.getFullYear();
+      const month = view.getMonth();
+      const firstWeekday = new Date(year, month, 1).getDay(); // 0=Sun
+      const daysInMonth  = new Date(year, month+1, 0).getDate();
+
+      title.textContent = 'Availability';
+      sub.textContent   = monthNames[month] + ' ' + year + ' — Select a date below.';
+
+      // Disable going back before the current month
+      prevBtn.disabled = view <= startOfCurrentMonth;
+      prevBtn.style.opacity = prevBtn.disabled ? '0.5' : '1';
+      prevBtn.style.cursor  = prevBtn.disabled ? 'not-allowed' : 'pointer';
+
+      const unavailable = new Set((UNAVAILABLE[ymKey(view)] || []).map(Number));
+
+      // leading blanks
+      for (let i=0; i<firstWeekday; i++){
+        const blank = document.createElement('div');
+        blank.style.minHeight = '48px';
+        grid.appendChild(blank);
+      }
+
+      // build days
+      for (let d=1; d<=daysInMonth; d++){
+        const btn = document.createElement('button');
+        btn.textContent = d;
+        btn.type = 'button';
+        btn.style.minHeight = '48px';
+        btn.style.border = '1px solid #eee';
+        btn.style.background = '#fff';
+        btn.style.borderRadius = '8px';
+        btn.style.fontWeight = '600';
+        btn.style.cursor = 'pointer';
+
+        const thisDate = new Date(year, month, d);
+        const isPast = thisDate < today;
+        const isUnavailable = unavailable.has(d);
+
+        if (isPast || isUnavailable){
+          // style as unavailable
+          btn.disabled = true;
+          btn.style.background = '#A5B0CC';
+          btn.style.color = '#fff';
+          btn.style.borderColor = '#A5B0CC';
+          btn.style.opacity = '.95';
+          btn.style.cursor = 'not-allowed';
+        } else {
+          btn.addEventListener('click', () => {
+            // one order/day -> single selection
+            if (selectedBtn){
+              selectedBtn.style.outline = '';
+              selectedBtn.style.outlineOffset = '';
+            }
+            selectedBtn = btn;
+            btn.style.outline = '2px solid var(--accent)';
+            btn.style.outlineOffset = '-2px';
+
+            const pretty = monthNames[month] + ' ' + d + ', ' + year;
+            out.textContent = 'Selected date: ' + pretty + '. Now choose your item type above to complete your order.';
+
+            try { localStorage.setItem('dc_selected_date', pretty); } catch(e){}
+
+            // reveal quick-start buttons and scroll to them
+            afterPick.style.display = 'flex';
+            afterPick.scrollIntoView({behavior:'smooth', block:'center'});
+          });
+
+          // subtle hover
+          btn.addEventListener('mouseenter', ()=>{ btn.style.boxShadow = '0 6px 18px rgba(43,45,66,.08)'; });
+          btn.addEventListener('mouseleave', ()=>{ btn.style.boxShadow = 'none'; });
+        }
+
+        grid.appendChild(btn);
+      }
+    }
+
+    prevBtn.addEventListener('click', () => {
+      if (view > startOfCurrentMonth) {
+        view.setMonth(view.getMonth() - 1);
+        render();
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      view.setMonth(view.getMonth() + 1);
+      render();
+    });
+
+    render();
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>FAQ — Dessert Corner</title>
+  <meta name="description" content="Frequently asked questions about ordering custom cakes, cupcakes, and cookies from Dessert Corner." />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="container header">
+    <div class="brand">
+<img src="images/logo.png" alt="Dessert Corner logo" class="site-logo"/>
+      <div style="font-size:0.95rem">Dessert Corner</div>
+    </div>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="order.html">Order</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+      <a class="cta" href="order.html">Start Order</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="section">
+      <h2>Frequently Asked Questions</h2>
+
+      <div class="faq-controls" style="display:flex;gap:.5rem;margin:.4rem 0 1rem;">
+        <button class="btn btn-outline" id="open-all" type="button">Open all</button>
+        <button class="btn btn-outline" id="close-all" type="button">Close all</button>
+      </div>
+
+      <div class="faq">
+        <div class="faq-item card">
+          <button class="faq-q" aria-expanded="false" aria-controls="a1" id="q1">
+            <span>How far in advance should I order?</span>
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-a" id="a1" role="region" aria-labelledby="q1">
+            <p>For custom cakes and cupcakes, please order <strong>7–10 days</strong> ahead. Cookies usually need <strong>3–5 days</strong>. Rush request? Message us—if your date is open we’ll try to fit you in.</p>
+          </div>
+        </div>
+
+        <div class="faq-item card">
+          <button class="faq-q" aria-expanded="false" aria-controls="a2" id="q2">
+            <span>Do you offer delivery?</span>
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-a" id="a2" role="region" aria-labelledby="q2">
+            <p>Pickup is standard. <em>Limited local delivery</em> may be available for an additional fee depending on date and distance. Ask when you place your order.</p>
+          </div>
+        </div>
+
+        <div class="faq-item card">
+          <button class="faq-q" aria-expanded="false" aria-controls="a3" id="q3">
+            <span>What payment methods do you accept?</span>
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-a" id="a3" role="region" aria-labelledby="q3">
+            <p>E-transfer and cash are accepted. For custom cakes, a small deposit may be required to secure your date.</p>
+          </div>
+        </div>
+
+        <div class="faq-item card">
+          <button class="faq-q" aria-expanded="false" aria-controls="a4" id="q4">
+            <span>Do you make allergy-friendly desserts?</span>
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-a" id="a4" role="region" aria-labelledby="q4">
+            <p>We can avoid certain ingredients on request, but items are produced in a home kitchen that handles common allergens (wheat, dairy, eggs, nuts).</p>
+          </div>
+        </div>
+
+        <div class="faq-item card">
+          <button class="faq-q" aria-expanded="false" aria-controls="a5" id="q5">
+            <span>Can you match an inspiration photo?</span>
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-a" id="a5" role="region" aria-labelledby="q5">
+            <p>Yes! Upload a photo with your order. We’ll keep the overall style while adding our own touch to make it uniquely yours.</p>
+          </div>
+        </div>
+
+        <div class="faq-item card">
+          <button class="faq-q" aria-expanded="false" aria-controls="a6" id="q6">
+            <span>What is your cancellation policy?</span>
+            <span class="faq-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-a" id="a6" role="region" aria-labelledby="q6">
+            <p>For cancellations <strong>5+ days</strong> before pickup, deposits can be credited to a future order. Within 5 days, ingredients and time are already planned so deposits are non-refundable.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comment Section -->
+<section class="section comments-banner">
+      <h3>Questions from our customers 💬</h3>
+      <p class="order-help">Have a question that’s not listed? Leave a comment below and we’ll reply soon!</p>
+      <div class="commentbox"></div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>© Dessert Corner — Built by Ranim Mortada</p>
+    </div>
+  </footer>
+
+  <!-- Accordion Script -->
+  <script>
+  (function(){
+    const items = document.querySelectorAll('.faq-item');
+    const openAll = document.getElementById('open-all');
+    const closeAll = document.getElementById('close-all');
+
+    function setOpen(btn, panel, isOpen){
+      btn.setAttribute('aria-expanded', String(isOpen));
+      panel.style.maxHeight = isOpen ? panel.scrollHeight + 'px' : '0px';
+      btn.querySelector('.faq-icon').textContent = isOpen ? '–' : '+';
+    }
+
+    items.forEach((item) => {
+      const btn = item.querySelector('.faq-q');
+      const panel = item.querySelector('.faq-a');
+      panel.style.maxHeight = '0px';
+      btn.addEventListener('click', () => {
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        setOpen(btn, panel, !expanded);
+      });
+    });
+
+    openAll.addEventListener('click', () => {
+      items.forEach(it => setOpen(it.querySelector('.faq-q'), it.querySelector('.faq-a'), true));
+    });
+    closeAll.addEventListener('click', () => {
+      items.forEach(it => setOpen(it.querySelector('.faq-q'), it.querySelector('.faq-a'), false));
+    });
+  })();
+  </script>
+
+ <script src="https://unpkg.com/commentbox.io/dist/commentBox.min.js"></script>
+<script>
+  commentBox('5728539995275264-proj', {
+    backgroundColor: '#FFF8E7',
+    textColor: '#1D2A4D',
+    subtextColor: '#555',
+    buttonColor: '#CC5500',
+    buttonTextColor: '#fff'
+  });
+
+</script>
+</body>
+ </html>
