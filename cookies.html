@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Custom Cookies — Dessert Corner</title>
+  <meta name="description" content="Order cookies: choose flavours and box size, add-ons, and an optional inspo image." />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="container header">
+    <div class="brand">
+<img src="images/logo.png" alt="Dessert Corner logo" class="site-logo"/>
+      <div style="font-size:0.95rem">Dessert Corner</div>
+    </div>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="order.html">Order</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="section">
+      <h2>Signature Cookies</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:start">
+        <div class="card">
+          <img class="thumb" src="images/signature_cookies.jpg" alt="Signature cookies"/>
+          <div style="margin-top:.6rem">
+            <h3 style="margin:0 0 .4rem">Available Flavours</h3>
+            <ul style="columns:1; padding-left:1.1rem; margin:0; line-height:1.7">
+              <li>Lemon Cheesecake</li>
+              <li>Gilmore Girls Coffee Cake</li>
+              <li>Apple Snickerdoodle</li>
+              <li>Build-a-bite (your mix-ins)</li>
+            </ul>
+            <p class="order-help" style="margin-top:.6rem">Mix-ins & add-ons available (e.g., M&Ms, white chocolate, nuts, stuffed center, drizzle/sprinkles).</p>
+          </div>
+        </div>
+
+        <form class="card" action="https://formspree.io/f/xnnoqdaz" method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="_subject" value="New Order — Cookies">
+          <input type="hidden" name="item_type" value="Cookies">
+          <input type="hidden" id="selected_date" name="selected_date" value="">
+          <input type="hidden" name="_redirect" value="thankyou.html">
+          <input type="text" name="website" style="display:none">
+
+          <div class="form-group">
+            <label for="name">Your name</label>
+            <input id="name" name="name" type="text" required>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required>
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone (optional)</label>
+            <input id="phone" name="phone" type="text" placeholder="(xxx) xxx-xxxx">
+          </div>
+
+          <div class="form-group" id="pickup-wrap">
+            <label for="pickup">Preferred pickup date</label>
+            <input id="pickup" name="pickup" type="date" required>
+          </div>
+          <div class="card" id="pickup-confirm" style="display:none; padding:.8rem;">
+            <strong id="pickup-badge">Pickup date:</strong>
+            <a href="order.html" onclick="try{localStorage.removeItem('dc_selected_date')}catch(e){}"
+               style="margin-left:.6rem; font-size:.9rem;">Change date</a>
+          </div>
+
+          <hr>
+
+          <!-- Cookie choices -->
+          <div class="form-group">
+            <label>Choose flavour(s)</label>
+            <div class="options-grid">
+              <label><input type="checkbox" name="cookie_flavours" value="Lemon Cheesecake"> Lemon Cheesecake</label>
+              <label><input type="checkbox" name="cookie_flavours" value="Gilmore Girls Coffee Cake"> Gilmore Girls Coffee Cake</label>
+              <label><input type="checkbox" name="cookie_flavours" value="Apple Snickerdoodle"> Apple Snickerdoodle</label>
+              <label><input type="checkbox" name="cookie_flavours" value="Build-a-bite"> Build-a-bite (describe)</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="box">Box size</label>
+            <select id="box" name="box_size" required>
+              <option value="" disabled selected>Select box size</option>
+              <option>Box of 4</option>
+              <option>Box of 6</option>
+              <option>Box of 12</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Add-ons (optional)</label>
+            <div class="options-grid">
+              <label><input type="checkbox" name="addons" value="M&Ms"> M&Ms / White Chocolate</label>
+              <label><input type="checkbox" name="addons" value="Nuts"> Nuts (pecans, etc.)</label>
+              <label><input type="checkbox" name="addons" value="Stuffed Center"> Stuffed center (e.g., Nutella, caramel)</label>
+              <label><input type="checkbox" name="addons" value="Drizzle/Sprinkles"> Top drizzle or sprinkles</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="details">Notes / customizations (optional)</label>
+            <textarea id="details" name="details" rows="4" placeholder="Mix-ins, dough style, allergies, anything specific…"></textarea>
+          </div>
+
+
+          <button class="btn btn-primary" type="submit">Submit Order</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>© Dessert Corner — Built by Ranim Mortada</p>
+    </div>
+  </footer>
+
+  <script>
+  (function(){
+    try{
+      var saved = localStorage.getItem('dc_selected_date');
+      var wrap  = document.getElementById('pickup-wrap');
+      var input = document.getElementById('pickup');
+      var conf  = document.getElementById('pickup-confirm');
+      var badge = document.getElementById('pickup-badge');
+      if(saved && wrap && input && conf && badge){
+        var d=new Date(saved), yyyy=d.getFullYear(), mm=String(d.getMonth()+1).padStart(2,'0'), dd=String(d.getDate()).padStart(2,'0');
+        input.value = `${yyyy}-${mm}-${dd}`;
+        wrap.style.display='none'; badge.textContent = `Pickup date: ${saved}`; conf.style.display='block';
+        var hidden=document.getElementById('selected_date'); if(hidden) hidden.value=saved;
+      }
+    }catch(e){}
+  })();
+  </script>
+</body>
+</html>
+
